@@ -26,49 +26,28 @@
   </main>
 </template>
 
-<script>
+<script setup>
 import JobListing from "./JobListing.vue"
-import { useJobsStore, FETCH_JOBS, FILTERED_JOBS } from "@/stores/jobs"
-import { mapActions, mapState } from "pinia"
+import { useJobsStore } from "@/stores/jobs"
+import { computed, onMounted } from "vue"
+import { useRoute } from "vue-router"
+import usePrevAndNextPages from "@/composables/usePrevAndNextPages"
 
-export default {
-  name: "JobListings",
-  components: { JobListing },
-  // data() {
-  //   return {
-  //     jobs: []
-  //   }
-  // },
-  computed: {
-    currentPage() {
-      return +(this.$route.query.page || "1")
-    },
-    previousPage() {
-      const prevPage = this.currentPage - 1
-      return prevPage >= 1 ? prevPage : undefined
-    },
-    ...mapState(useJobsStore, {
-      FILTERED_JOBS,
-      nextPage() {
-        const nextPage = this.currentPage + 1
-        const countPage = Math.ceil(this.FILTERED_JOBS.length / 10)
-        console.log(this.previousPage, this.nextPage, countPage)
-        return nextPage <= countPage ? nextPage : undefined
-      },
-      displayedJobs() {
-        const pageCurrent = this.currentPage
-        return this.FILTERED_JOBS.slice((pageCurrent - 1) * 10, pageCurrent * 10)
-      }
-    })
-  },
+const jobsStore = useJobsStore()
+onMounted(jobsStore.FETCH_JOBS)
 
-  async mounted() {
-    this.FETCH_JOBS()
-  },
-  methods: {
-    ...mapActions(useJobsStore, [FETCH_JOBS])
-  }
-}
+const route = useRoute()
+const currentPage = computed(() => +(route.query.page || "1"))
+
+const FILTERED_JOBS = computed(() => jobsStore.FILTERED_JOBS)
+const countPage = computed(() => Math.ceil(FILTERED_JOBS.value.length / 10))
+
+const { previousPage, nextPage } = usePrevAndNextPages(currentPage, countPage) // dont need to use toRefs, bc prev, nextPage alrdy use computed
+
+const displayedJobs = computed(() => {
+  const pageCurrent = currentPage.value
+  return FILTERED_JOBS.value.slice((pageCurrent - 1) * 10, pageCurrent * 10)
+})
 </script>
 
 <style></style>
