@@ -7,21 +7,21 @@
   />
 </template>
 
-<script>
-export default {
-  name: "TextInput",
-  props: {
-    modelValue: {
-      type: String,
-      required: true
-    }
-  },
-  emits: ["update:modelValue"], // avoid eslint warning
-  methods: {
-    handleInput(e) {
-      this.$emit("update:modelValue", e.target.value) // send to JobSearchForm
-    }
+<script lang="ts" setup>
+import { defineComponent } from "vue"
+
+defineProps({
+  modelValue: {
+    type: String,
+    required: true
   }
+})
+
+const emit = defineEmits(["update:modelValue"])
+
+const handleInput = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  emit("update:modelValue", target.value) // send to JobSearchForm
 }
 </script>
 

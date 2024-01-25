@@ -2,12 +2,8 @@
   <hero-component />
 </template>
 
-<script>
+<script lang="ts" setup>
 import HeroComponent from "../components/JobSearch/HeroComponent.vue"
-export default {
-  components: { HeroComponent },
-  name: "HomeView"
-}
 </script>
 
 <style></style>

@@ -8,39 +8,24 @@
   </section>
 </template>
 
-<script>
-export default {
-  name: "HeroMessage",
-  data() {
-    return {
-      message: "Build",
-      messages: ["Build", "Create", "Design", "Code"],
-      interval: null,
-      count: 1
-    }
-  },
-  computed: {
-    messageClass() {
-      return { [this.message.toLowerCase()]: true }
-    }
-  },
-  created() {
-    this.changeMessage()
-  },
-  beforeUnmount() {
-    // interval will run forever even unmounted
-    clearInterval(this.interval)
-  },
-  methods: {
-    changeMessage() {
-      this.interval = setInterval(() => {
-        this.message = this.messages[this.count]
-        const nextIdx = (this.count + 1) % this.messages.length
-        this.count = nextIdx
-      }, 3000)
-    }
-  }
+<script lang="ts" setup>
+import { computed, onBeforeUnmount, onMounted, ref } from "vue"
+
+const message = ref("Build")
+const messages = ["Build", "Create", "Design", "Code"]
+const count = ref(1)
+const interval = ref<ReturnType<typeof setInterval>>(null)
+
+const messageClass = computed(() => ({ [message.value.toLowerCase()]: true }))
+const changeMessage = () => {
+  interval.value = setInterval(() => {
+    message.value = messages[count.value]
+    const nextIdx = (count.value + 1) % messages.length
+    count.value = nextIdx
+  }, 3000)
 }
+onMounted(changeMessage) // or onCreated
+onBeforeUnmount(() => clearInterval(interval.value))
 </script>
 
 <style scoped>

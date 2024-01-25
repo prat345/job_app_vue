@@ -41,15 +41,10 @@
   </main>
 </template>
 
-<script>
+<script lang="ts" setup>
 import HeroMessage from "./HeroMessage.vue"
 import JobSearchForm from "./JobSearchForm.vue"
 import SpotLight from "./SpotLight.vue"
-
-export default {
-  components: { HeroMessage, JobSearchForm, SpotLight },
-  name: "HeroComponent"
-}
 </script>
 
 <style></style>

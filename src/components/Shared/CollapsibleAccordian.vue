@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, computed } from "vue"
 
 defineProps({
@@ -30,22 +30,6 @@ const open = () => {
   isOpen.value = !isOpen.value
 }
 const carrotIcon = computed(() => (isOpen.value ? ["fas", "angle-up"] : ["fas", "angle-down"]))
-
-// data() {
-//   return {
-//     isOpen: false
-//   }
-// },
-// computed: {
-//   carrotIcon() {
-//     return this.isOpen ? ["fas", "angle-up"] : ["fas", "angle-down"]
-//   }
-// },
-// methods: {
-//   open() {
-//     this.isOpen = !this.isOpen
-//   }
-// }
 </script>
 
 <style></style>

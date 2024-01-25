@@ -4,14 +4,16 @@ import { createTestingPinia } from "@pinia/testing"
 import { useUserStore } from "@/stores/user"
 import { RouterLinkStub } from "@vue/test-utils"
 import { useRoute } from "vue-router"
+import type { Mock } from "vitest"
 vi.mock("vue-router")
 
 import MainNav from "@/components/Navigation/MainNav.vue"
+const useRouteMock = useRoute as Mock
 
 // login btn/ sign in action depends on pinia state > need to mock pinia
 describe("MainNav", () => {
   const renderMainNav = () => {
-    useRoute.mockReturnValue({ name: "Home" })
+    useRouteMock.mockReturnValue({ name: "Home" })
     const pinia = createTestingPinia({ stubActions: false })
 
     render(MainNav, {

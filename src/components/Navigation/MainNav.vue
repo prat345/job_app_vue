@@ -16,7 +16,7 @@
           </ul>
         </nav>
         <div class="ml-auto flex h-full items-center">
-          <ActionButton v-if="!isLogin" @click="loginUser" text="Sign in" variant="primary" />
+          <ActionButton v-if="!isLogin" @click="LOGIN_USER" text="Sign in" variant="primary" />
           <ProfileImage v-else />
         </div>
       </div>
@@ -25,40 +25,29 @@
   </header>
 </template>
 
-<script>
-import { mapActions, mapState } from "pinia"
+<script lang="ts" setup>
 import { useUserStore } from "@/stores/user"
+import { computed, ref } from "vue"
 
-import ActionButton from "../Shared/ActionButton.vue"
+import ActionButton from "@/components/Shared/ActionButton.vue"
 import ProfileImage from "./ProfileImage.vue"
 import SubNav from "./SubNav.vue"
-export default {
-  components: { ActionButton, ProfileImage, SubNav },
-  name: "MainNav",
-  data() {
-    return {
-      navItems: [
-        { text: "Teams", url: "/teams" },
-        { text: "Location", url: "/" },
-        { text: "Benefits", url: "/" },
-        { text: "Jobs", url: "/jobs/results" },
-        { text: "Students", url: "/" }
-      ]
-    }
-  },
-  computed: {
-    ...mapState(useUserStore, ["isLogin"]), // get specific state
-    headerHeightClass() {
-      return {
-        "h-16": !this.isLogin, // isLogin() from store
-        "h-32": this.isLogin
-      }
-    }
-  },
-  methods: {
-    ...mapActions(useUserStore, ["loginUser"])
-  }
-}
+
+const navItems = ref([
+  { text: "Teams", url: "/teams" },
+  { text: "Location", url: "/" },
+  { text: "Benefits", url: "/" },
+  { text: "Jobs", url: "/jobs/results" },
+  { text: "Students", url: "/" }
+])
+
+const userStore = useUserStore()
+const isLogin = computed(() => userStore.isLogin)
+const headerHeightClass = computed(() => ({
+  "h-16": !isLogin.value, // isLogin() from store
+  "h-32": isLogin.value
+}))
+const LOGIN_USER = userStore.LOGIN_USER
 </script>
 
 <style></style>
